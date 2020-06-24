@@ -1,0 +1,88 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html " as wtf %}
+
+{% block title %}
+View User
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Lingurița</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              {% if curr_usr_role == 'Doctor' %}
+                <li><a href="{{ url_for('assign_patient') }}">Adaugă pacient</a></li>
+              {% endif %}
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+              <li><a href="{{ url_for('change_info') }}">Modifică informații cont</a></li>
+            <li><a href="{{ url_for('logout') }}">Deconectează-te</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+          </form>
+
+        </div>
+      </div>
+    </nav>
+
+    <body style="background-color: #eeeeee;">
+         <div style="display: inline-block; width:45%; float: left">
+            <h4> Nume: {{ patient.first_name }} {{ patient.last_name }}</h4>
+             <h4>Email: {{ patient.email }}</h4>
+             {% if curr_usr_role == 'Doctor' %}
+                <h4> CNP: {{ patient.CNP }}</h4>
+                <div class="form d-inline" >
+                  <form class="form-group text-left" method = "POST" action = {{ url_for('view_patient', patient_id=patient.id) }}>
+                      {{ form.hidden_tag() }}
+                      {{ wtf.form_field(form.note_text) }}
+                      {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                            {% for message in messages %}
+                            <li style="color:indianred">{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                      {% endwith %}
+
+                    <button class="btn-primary" type="submit">Adaugă</button>
+                  </form>
+
+                </div>
+                <h4>Notițele dumneavoastră:</h4>
+                 {% for note in notes %}
+                 <h4>{{ note.datetime}}: {{ note.text }}</h4>
+                {% endfor %}
+         {% endif %}
+        <button type="button" class="btn btn-danger" onclick=" window.location.href='{{ url_for('stergere_relatie_medic_pacient', id_user=patient.id)}}'">Elimină din lista ta</button>
+
+         </div>
+         <div style="display: inline-block; width:45%; float: right">
+           <img src="data:image/png;base64, {{ url_plot }}" style="width:100%">
+         </div>
+         <br>
+    <br>
+    <br>
+    <br>
+    </body>
+    <footer class="page-footer font-small">
+      <div class="footer-copyright text-center navbar-fixed-bottom" style="background-color: #333333; color: #9D9D9D;">© 2020 Copyright:
+          <a href="https://github.com/InaTencu"> Țencu Ina </a>
+      </div>
+    </footer>
+
+{% endblock %}
+

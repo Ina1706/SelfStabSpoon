@@ -19,199 +19,81 @@ Dashboard
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Lingurița</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+          <li class="nav-item active"><a class="nav-link active">Dashboard</a></li>
+              {% if curr_usr_role == 'Doctor' %}
+                <li><a href="{{ url_for('assign_patient') }}">Adaugă pacient</a></li>
+              {% endif %}
+              <li><a href="{{ url_for('change_info') }}">Modifică informații cont</a></li>
+            <li><a href="{{ url_for('logout') }}">Deconectează-te</a></li>
           </ul>
           <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
           </form>
+
         </div>
       </div>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
+    <body style="background-color: #eeeeee;">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+         <div>
+         <ul>
+         {% if curr_usr_role == 'Doctor' %}
+             {% if patients|length == 0 %}
+                 <p>Nu aveți încă pacienți asignați. Mergeți la „Adaugă pacienți”</p>
+             {% else %}
+                     <p>Pacienții dumneavoastra:</p>
+                {% for i in range(patients|length) %}
+                    {% if pending[i] == False %}
+                    <li><a href="{{ url_for('view_patient', patient_id=patients[i].id) }}">{{ patients[i].first_name }}  {{ patients[i].last_name }}</a></li>
+                    {% else %}
+                    <li class="pending" style="color:indianred">{{ patients[i].first_name }}  {{ patients[i].last_name }} nu a acceptat înca invitația dvs.</li>
+                    {% endif %}
+                {% endfor %}
+             {% endif %}
+         {% endif %}
+         </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Welcome, {{ name }}</h1>
+         <div>
+         {% if curr_usr_role == 'Patient' %}
+             {% if pending_doctors|length != 0 %}
+             <p>Următorii medici doresc să vă adauge în listele lor de pacienți: </p>
+                 {% for doctor in pending_doctors %}
+                        <li>{{ doctor.first_name }} {{ doctor.last_name }} <button type="button" class="btn btn-success" onclick=" window.location.href='{{ url_for('gestionare_cereri', doctor_id=doctor.id, accepted=1)}}'">Acceptă</button>  <button type="button" class="btn btn-danger" onclick=" window.location.href='{{ url_for('gestionare_cereri', doctor_id=doctor.id, accepted=0)}}'">Șterge cererea</button></li>
+                 {% endfor %}
+             {% endif %}
 
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div>
+             {% if assigned_doctors|length != 0 %}
+                 <p>Medicii dumneavoastră:</p>
+                 {% for doctor in assigned_doctors %}
+                         <li><a href="{{ url_for('view_patient', patient_id=doctor.id) }}">{{ doctor.first_name }} {{ doctor.last_name }}</a></li>
+                 {% endfor %}
+             {% endif %}
 
-          <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            {% if device_key == 0 %}
+                <a href="{{ url_for('add_device') }}">Adaugă un nou device pentru a putea folosi funcția de dashboard</a>
+            {% else %}
+            <h4> Folosiți device-ul cu codul {{ device_key }} <button type="button" class="btn btn-danger" onclick=" window.location.href='{{ url_for('delete_device')}}'">Nu mai folosesc acest device</button></h4>
+             {% endif %}
+         {% endif %}
         </div>
+    </body>
+    <footer class="page-footer font-small">
+      <div class="footer-copyright text-center navbar-fixed-bottom" style="background-color: #333333; color: #9D9D9D;">© 2020 Copyright:
+          <a href="https://github.com/InaTencu"> Țencu Ina </a>
       </div>
-    </div>
+    </footer>
+    <br>
+
 {% endblock %}

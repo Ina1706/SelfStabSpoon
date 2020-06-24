@@ -1,17 +1,17 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-Demo App
+Linguriță
 {% endblock %}
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
+<link rel="stylesheet" href="static/index.css">
 {% endblock %}
 
 {% block content %}
     <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -19,24 +19,66 @@ Demo App
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand active" href="#">Lingurița</a>
         </div>
+          {% if logged_in == 0 %}
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
             <li><a href="{{ url_for('login') }}">Login</a></li>
             <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-          </ul>
+                   </ul>
+
+
         </div><!--/.nav-collapse -->
+          {% else %}
+          <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+              {% if curr_usr_role == 'Doctor' %}
+                <li><a href="{{ url_for('assign_patient') }}">Adaugă pacient</a></li>
+              {% endif %}
+              <li><a href="{{ url_for('change_info') }}">Modifică informații cont</a></li>
+            <li><a href="{{ url_for('logout') }}">Deconectează-te</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+          </form>
+
+        </div>
+      {% endif %}
       </div>
     </nav>
 
     <div class="container">
-
-      <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-      </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
     </div><!-- /.container -->
+    <body style="background-color: #eeeeee;">
+    <figure>
+    <img src="{{url_for('static', filename='lingura_acum1.jpg')}}" class="spoon" alt="Responsive image" />
+    </figure>
+    <h1 class="display-4" style="text-align: center;">Despre Linguriță</h1>
+    <br>
+    <div class="text">
+    <p class="mb-0">    Potrivit unui studiu publicat de Organizația Mondială a Sănătății [1], boala Parkinson afectează anual între 4.5 și 19 indivizi din 100.000, adică aproximativ 1.000.000 de persoane la nivel global. Dintre aceștia, aproximativ 25% suferă de tremur la nivelul mâinii. Există și alte boli care cauzează mișcarea involuntară a mâinii, cum ar fi scleroza multiplă, tremurul esențial, distrofia și atrofia musculară.</p>
+<p>Simptomul comun al acestor afecțiuni are un impact major asupra vieților pacienților. Sarcini de bază, care nu pun deloc probleme indivizilor sănătoși, precum mâncatul, îmbrăcatul sau condusul autovehiculelor sunt o povară pentru persoanele afectate, iar incapacitatea de a le duce fără ajutor la bun sfârșit afectează semnificativ calitatea vieții acestora și conduce la depresie, pierderea stimei de sine și chiar la excluziune socială.</p>
+<p>Proiectul de licență ales este un tacâm electronic conceput pentru acest grup de persoane. Se dorește elaborarea unui produs pe care tremurul este anulat, de dimensiuni cât mai mici, ușor de folosit și cu un design ergonomic, minimizând astfel disconfortul pacienților.</p>
+<p>Obiectivul proiectului este de a îi ajuta pe pacienții menționați să mănânce mai eficient, facilitând modul în care decurge această activitate de zi cu zi, și, cel mai important, fără ajutorul altor persoane, contribuind astfel la recăpătarea încrederii în sine.<p>
+ <p>Oferindu-le acestora un produs care poate face diferența dintre mișcarea voluntară – spre exemplu, poziționarea lingurii într-un bol, mișcarea de la farfurie până la gură – și tremurul la nivelul mâinii, cavitatea lingurii este echilibrată doar când sunt detectate mișcările involuntare, aceasta urmând mișcarea fluentă pe care, altfel, pacientul ar fi întreprins-o.<p>
+</div>
+    <br>
+    </body>
+        <footer class="page-footer font-small">
+      <div class="footer-copyright text-center navbar-fixed-bottom" style="background-color: #333333; color: #9D9D9D;">© 2020 Copyright:
+          <a href="https://github.com/InaTencu"> Țencu Ina </a>
+      </div>
+    </footer>
+    <br>
 {% endblock %}

@@ -1,0 +1,89 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Lingurița</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          <li class="nav-item active"><a class="nav-link active">Dashboard</a></li>
+              {% if curr_usr_role == 'Doctor' %}
+                <li><a href="{{ url_for('assign_patient') }}">Adaugă pacient</a></li>
+              {% endif %}
+              <li><a href="{{ url_for('change_info') }}">Modifică informații cont</a></li>
+            <li><a href="{{ url_for('logout') }}">Deconectează-te</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+          </form>
+
+        </div>
+      </div>
+    </nav>
+
+    <body style="background-color: #eeeeee;">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h4>Mesaje nerezolvate:</h4>
+
+    <div class="container">
+    {% for request in new_requests %}
+        {% if loop.index % 2 == 1 %}
+            <div class="row">
+        {% endif %}
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="card w-50">
+        <div class="card-body">
+            <p class="card-text">User id: {{ request.patient_id }}</p>
+            <p class="card-text">Nume: {{ request.last_name }} {{ request.first_name }}</p>
+            <p class="card-text">Mesaj: {{ request.message }}</p>
+            <form action="{{ url_for('resolve_request') }}" method="post">
+                <input type="text" name={{ request.id }}>
+                <input class="btn btn-success" type="submit">
+            </form>
+            <a type="button" class="btn btn-success" href="{{ url_for('dashboard_admin', request_id=request.id, text=text)}}">Acceptă</a>
+        </div>
+        </div>
+        </div>
+        {% if loop.index % 2 == 0 %}
+            </div>
+        {% endif %}
+
+    {% endfor %}
+    </div>
+
+        <br>
+
+
+    </body>
+    <footer class="page-footer font-small">
+      <div class="footer-copyright text-center navbar-fixed-bottom" style="background-color: #333333; color: #9D9D9D;">© 2020 Copyright:
+          <a href="https://github.com/InaTencu"> Țencu Ina </a>
+      </div>
+    </footer>
+
+{% endblock %}

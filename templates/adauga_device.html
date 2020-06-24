@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends "bootstrap/base.html" %}
+    {% import "bootstrap/wtf.html " as wtf %}</title>
+
+{% block title %}
+Adauga pacient
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
+{% endblock %}
+
+{% block content %}
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Lingurița</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+              {% if curr_usr_role == 'Doctor' %}
+                <li><a href="{{ url_for('assign_patient') }}">Adaugă pacient</a></li>
+              {% endif %}
+              <li ><a href="{{ url_for('change_info') }}">Modifică informații cont</a></li>
+            <li><a href="{{ url_for('logout') }}">Deconectează-te</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+          </form>
+
+        </div>
+      </div>
+    </nav>
+
+<div class="container">
+  <form class="form-signin" method = "POST", action = "/adauga_device">
+    <h2 class="form-signin-heading">Adauga device</h2>
+      {{ form.hidden_tag() }}
+      {{ wtf.form_field(form.device_key) }}
+      {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                <li style="color:indianred">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+          {% endwith %}
+     <button class="btn btn-lg btn-primary btn-block" type="submit">Adauga</button>
+  </form>
+
+</div> <!-- /container -->
+
+</head>
+<body style="background-color: #eeeeee;">
+
+</body>
+<footer class="page-footer font-small">
+      <div class="footer-copyright text-center navbar-fixed-bottom" style="background-color: #333333; color: #9D9D9D;">© 2020 Copyright:
+          <a href="https://github.com/InaTencu"> Țencu Ina </a>
+      </div>
+    </footer>
+{% endblock %}
+</html>

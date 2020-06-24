@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% extends "bootstrap/base.html" %}
+    <title></title>
+    {% extends "bootstrap/base.html" %}
     {% import "bootstrap/wtf.html " as wtf %}
 
 {% block title %}
@@ -15,22 +16,68 @@ Sign Up
 {% endblock %}
 
 {% block content %}
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Lingurița</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+              <li><a href="{{ url_for('login') }}">Login</a></li>
+             <li class="nav-item active"><a class="nav-link active">Sign up</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 <div class="container">
 
-  <form class="form-signin" method = "POST", action = "/signup">
+  <form method = "POST" action = "/signup">
     <h2 class="form-signin-heading">Sign Up</h2>
       {{ form.hidden_tag() }}
-      {{ wtf.form_field(form.username) }}
+      <div class="col-auto">
+      {{ wtf.form_field(form.first_name) }}
+
+      {{ wtf.form_field(form.last_name) }}
+      </div>
+      {{ wtf.form_field(form.cnp) }}
       {{ wtf.form_field(form.email) }}
       {{ wtf.form_field(form.password) }}
+      {{ wtf.form_field(form.confirm_password) }}
       {{ wtf.form_field(form.role) }}
+      <p style="text-align: justify">Site-ul nostru colectează următoarele date: nume, prenune, cod numeric personal, email, datele privitoare la mișcarea cauzată de tremur și codul tacâmului electronic pe care îl utilizați (în cazul pacienților) și relațiile dvs. cu medicii/pacienții.</p>
+      <p style="text-align: justify">Colectăm datele atunci când dumneavoastră: vă înregistrați pe platformă, adăugați medici/pacienți noi, adăgați codul unui tacâm nou și îl utilizați (în cazul pacienților), adăgați notițe despre pacienții dumnveastră (în cazul medicilor).</p>
+      <p style="text-align: justify">Colectăm aceste date pentru a putea fi identificați de medici/pacienți și pentru a crea o cronologie medicală și statistici ale evoluției tremurului. Dacă vă dați acordul, site-ul notru va împărtăși datele cu medicii/pacienții cu care relaționați.</p>
+      <p style="text-align: justify">Drepturile asupra datelor dumnveastră sunt următoarele:</p>
+      <ul>
+          <li style="text-align: justify">Dreptul de a le accesa: La cerere, puteți primi copii ale datelor dumneavostră personale;</li>
+          <li style="text-align: justify">Dreptul de a le rectificare: La cerere, ne puteți solicita să corectăm orice date informații pe care le considerați inexacte sau incomplete;</li>
+          <li style="text-align: justify">Dreptul de a le șterge: La cerere, putem șterge datele dumnevoastră personale și de a anonimiza datele colectate de la tacâmul electronic;</li>
+          <li style="text-align: justify">Dreptul de a restricționa procesarea: La cerere, putem restricționa procesarea datelor dumneavoastră până la revenirea asupra condiției;</li>
+          <li style="text-align: justify">Dreptul la portarea datelor: La cerere, putem transfera datele dumneavoastră altei organizații sau dumneavoastră în mod direct.</li>
+      </ul>
+      <p style="text-align: justify"> Pentru orice neclaritate legată de politica de confidențialitate sau doriți să vă exercitați oricare din drepturile de mai sus, ne puteți scrie la adresa ina.tencu@gmail.com sau ne puteți lăsa un mesaj la secțiunea dedicată „Contactează un administrator” </p>
+      {{ wtf.form_field(form.gdpr) }}
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
   </form>
 
 </div> <!-- /container -->
-{% endblock %}</title>
 </head>
 <body>
 
 </body>
+
+<footer class="page-footer font-small">
+      <div class="footer-copyright text-center navbar-fixed-bottom" style="background-color: #333333; color: #9D9D9D;">© 2020 Copyright:
+          <a href="https://github.com/InaTencu"> Țencu Ina </a>
+      </div>
+    </footer>
+{% endblock %}
 </html>
