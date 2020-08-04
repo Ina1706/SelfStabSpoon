@@ -4,7 +4,7 @@ This bachelor's project represents the creation of a hardware device - a self-st
 ![alt text](spoon.jpg)
 The electronic cutlery is based on a Raspberry Pi (the brain of the hardware assembly), an orientation sensor, consisting of a module with accelerometer and gyroscope, which provides information on the position and movement of the handle, and two servo motors that deal with effective stabilization of the spoon cavity.  
 ## The web application
-![alt text](web_application.png)
+![alt text](web_application.PNG)
 The web application aims to continuously inform doctors about the condition of patients who use the hardware device, providing them statistics on the evolution of each patient's disease, using the data collected by the cutlery. The chosen framework for the web application was "Flask" which is written in the programming language called "Python".  
 The web application is designed to bring new functionalities to the cutlery, it is not mandatory to use both components. Thus, users with no internet access do not have to configure the hardware device in any way in order to be able to use its main function, namely to minimize the effect of tremor.  
 
