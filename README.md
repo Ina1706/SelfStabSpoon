@@ -1,5 +1,7 @@
 # Self Stabilizing Spoon
 
+| | |
+| - | - |
 | This bachelor's project represents the creation of a hardware device - a self-stabilizing electronic cutlery - which helps people suffering from hand tremor to eat more efficiently, and a web application created to deliver statistics to the doctors about the evolution of each patient's tremor. | ![Alt text](stabilization.gif) |
 
 
