@@ -1,6 +1,8 @@
 # Self Stabilizing Spoon
-![Alt text](stabilization.gif)
-This bachelor's project represents the creation of a hardware device - a self-stabilizing electronic cutlery - which helps people suffering from hand tremor to eat more efficiently, and a web application created to deliver statistics to the doctors about the evolution of each patient's tremor.  
+
+| This bachelor's project represents the creation of a hardware device - a self-stabilizing electronic cutlery - which helps people suffering from hand tremor to eat more efficiently, and a web application created to deliver statistics to the doctors about the evolution of each patient's tremor. | ![Alt text](stabilization.gif) |
+
+
 ## The hardware component
 ![alt text](spoon.jpg)
 The electronic cutlery is based on a Raspberry Pi (the brain of the hardware assembly), an orientation sensor, consisting of a module with accelerometer and gyroscope, which provides information on the position and movement of the handle, and two servo motors that deal with effective stabilization of the spoon cavity.  
